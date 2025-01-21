@@ -40,12 +40,12 @@ public:
 
     // Default Constructor
     User(){
-        name = username = password = email = phone = address;
+        name = username = password = email = phone = address = '0';
     }
 
     // Getters
     void getName() const {cout << "\nName:" << name;}
-    void getUserName() const {cout << "\nUserName:" << username;}
+    string getUserName() const {return username;}
     void getemail() const {cout << "\nEmail:" << email;}
     void getPhone() const {cout << "\nPhone:" << phone;}
     void getAddress() const {cout << "\nAddress:" << address;}
@@ -67,11 +67,41 @@ public:
 
 class FoodDeliverySystem {
 private:
+    unordered_map<string, User> users;  // stores users by their username
     unordered_map<string, Restaurant> restaurants;
     unordered_map<int, string> orders;
     int orderIdCounter = 100;
 
 public:
+    bool registerUser(User user) {
+        if (users.find(user.getUserName()) == users.end()) {
+            users[user.getUserName()] = user;
+            cout << "\nUser '" << user.getUserName() << "' registered successfully!" << endl;
+            return true;
+        } else {
+            cout << "\nUser already exists." << endl;
+            return false;
+        }
+    }
+
+    bool loginUser(string username) {
+        if (users.find(username) != users.end()) {
+            string password;
+            cout<<"Enter password: ";
+            getline(cin, password);
+
+            if(users[username].validatePassword(password)){
+                cout << "\nLogin successful!" << endl;
+            } else{
+                cout<<"\nIncorrect Password";
+            }
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     void addRestaurant(string name, string cuisine) {
         restaurants[name] = Restaurant(name, cuisine);
         cout << "\n\nRestaurant '" << name << "' added successfully!" << endl;
@@ -144,16 +174,48 @@ int main() {
     u1.setUserName("k10");
     u1.setAddress("Delhi");
 
-    u1.getName();
-    u1.getemail();
-    u1.getAddress();
-    u1.getPassword();
+    system.registerUser(u1);
 
-    system.addRestaurant("Pizza Palace", "Italian");
-    system.addMenuItem("Pizza Palace", "Margherita Pizza", 10);
-    system.addMenuItem("Pizza Palace", "Garlic Bread", 5);
+    // u1.getName();
+    // u1.getemail();
+    // u1.getAddress();
+    // u1.getPassword();
 
-    cout << endl;
-    system.viewRestaurantMenu("Pizza Palace");
+    // system.addRestaurant("Pizza Palace", "Italian");
+    // system.addMenuItem("Pizza Palace", "Margherita Pizza", 10);
+    // system.addMenuItem("Pizza Palace", "Garlic Bread", 5);
+
+    // cout << endl;
+    // system.viewRestaurantMenu("Pizza Palace");
+    
+    // Get username and password from user
+    string username;
+    cout<<"Enter username: ";
+    getline(cin, username);
+    
+
+    // Check if user is new or already resistered
+    if(system.loginUser(username)){
+        // Ordering system
+    } else{
+        string password, name, email, phone, address;
+        cout<<"Enter pa ssword: ";
+        getline(cin, password);
+        
+        cout<<"Enter name: ";
+        getline(cin, name);
+
+        cout<<"Enter email: ";
+        getline(cin, email);
+        
+        cout<<"Enter phone: ";
+        getline(cin, phone);
+        
+        cout<<"Enter address: ";
+        getline(cin, address);
+
+        User newUser(name, username, password, email, phone, address);
+        system.registerUser(newUser);
+    }
     return 0;
 }
