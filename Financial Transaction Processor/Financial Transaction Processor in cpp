@@ -1,0 +1,90 @@
+#include <iostream>
+#include <string>
+#include <tuple>
+
+using namespace std;
+
+
+int Total_Fee(int transaction_amount, int transaction_fee) {
+    return (transaction_amount + transaction_fee);
+}
+
+
+int Remaining_balance(string transaction_type, int acc_balance, int transaction_amount, int transaction_fee) {
+    int left_amount;
+    if (transaction_type == "deposit") {
+       
+        left_amount = acc_balance + (transaction_amount - transaction_fee);
+    } else if (transaction_type == "withdrawal") {
+       
+        left_amount = acc_balance - (transaction_amount + transaction_fee);
+    } else if (transaction_type == "transfer") {
+       
+        left_amount = acc_balance - (transaction_amount + transaction_fee);
+    } else {
+       
+        left_amount = -1;
+    }
+    return left_amount;
+}
+
+int main() {
+    int acc_balance;
+    cin >> acc_balance; 
+    
+    string transaction_type;
+    cin >> transaction_type; 
+    
+    int transaction_amount;
+    cin >> transaction_amount; 
+    
+    int transaction_hour;
+    cin >> transaction_hour;
+    int transaction_fee;
+    cin >> transaction_fee;
+
+    
+    if (acc_balance < 1 || acc_balance > 1000000) {
+        cout << "Invalid balance!!!!" << endl;
+        return -1;
+    }
+
+    
+    if (transaction_amount < 1 || transaction_amount > 50000) {
+        cout << "Invalid transaction balance!!!!" << endl;
+        return -1;
+    }
+
+    
+    if (transaction_hour < 0 || transaction_hour > 23) {
+        cout << "Invalid transaction hour!!!!" << endl;
+        return -1;
+    }
+
+    
+    if (transaction_fee < 0 || transaction_fee > 10) {
+        cout << "Invalid transaction fee!!!!" << endl;
+        return -1;
+    }
+
+    
+    if (transaction_type != "deposit" && transaction_type != "withdrawal" && transaction_type != "transfer") {
+        cout << "Invalid transaction type!!!!" << endl;
+        return -1;
+    }
+
+    
+    int total_fee = Total_Fee(transaction_amount, transaction_fee);
+    int remaining_balance = Remaining_balance(transaction_type, acc_balance, transaction_amount, transaction_fee);
+
+    
+    if (remaining_balance == -1) {
+        cout << "Invalid transaction type!!!!" << endl;
+        return -1;
+    }
+
+    
+    cout << "(" << total_fee << ", " << remaining_balance << ")" << endl;
+
+    return 0;
+}
